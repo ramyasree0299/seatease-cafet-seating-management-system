@@ -1,0 +1,54 @@
+The number of occupied seats: 1
+The number of empty seats: 0
+The chairs found counter check:  6.0
+(225, 400, 3)
+Object detected:  chair: 92.67%
+The number of occupied seats: 0
+The number of empty seats: 1
+The chairs found counter check:  6.0
+(225, 400, 3)
+Object detected:  chair: 95.60%
+The number of occupied seats: 0
+The number of empty seats: 1
+The chairs found counter check:  5.0
+(225, 400, 3)
+Object detected:  chair: 93.43%
+The number of occupied seats: 0
+The number of empty seats: 1
+The chairs found counter check:  4.0
+(225, 400, 3)
+Object detected:  chair: 95.28%
+The number of occupied seats: 0
+The number of empty seats: 1
+The chairs found counter check:  3.0
+(225, 400, 3)
+Object detected:  chair: 93.74%
+The number of occupied seats: 0
+The number of empty seats: 1
+The chairs found counter check:  2.0
+(225, 400, 3)
+Object detected:  chair: 94.61%
+The number of occupied seats: 0
+The number of empty seats: 1
+The chairs found counter check:  1.0
+(225, 400, 3)
+Object detected:  chair: 91.23%
+The number of occupied seats: 0
+The number of empty seats: 1
+Empty table ready to be occupied
+The chairs found counter check:  6.0
+(225, 400, 3)
+Object detected:  chair: 95.37%
+The number of occupied seats: 0
+The number of empty seats: 1
+The chairs found counter check:  5.0
+(225, 400, 3)
+Object detected:  person: 99.11%
+Object detected:  diningtable: 26.93%
+The number of occupied seats: 1
+The number of empty seats: 0
+The chairs found counter check:  6.0
+(225, 400, 3)
+Object detected:  person: 99.62%
+The number of occupied seats: 1
+The number of empty seats: 0

@@ -5,10 +5,6 @@
 This project aims to do real-time object detection through a laptop camera or webcam using OpenCV and MobileNetSSD. The idea is to loop over each frame of the video stream, detect objects like person, chair, dog, etc. and bound each detection in a box.
 Here, we will go through the steps required for setting up the project and some explanation about the code.
 
-**Hi!**
-
-![alt text](https://github.com/Surya-Murali/Real-Time-Object-Detection-With-OpenCV/blob/master/real_time_output_gif/real_time_output.gif)
-
 ### How to run this code?
 
 **Step 1:** Create a directory in your local machine and cd into it

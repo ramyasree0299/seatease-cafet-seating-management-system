@@ -2,7 +2,7 @@
 # python real_time.py --prototxt MobileNetSSD_deploy.prototxt.txt --model MobileNetSSD_deploy.caffemodel
 
 # import packages
-from imutils.video import VideoStream
+from imutils.video import VideoStream, FileVideoStream
 from imutils.video import FPS
 import numpy as np
 import time
@@ -21,22 +21,6 @@ ap.add_argument("-c", "--confidence", type=float, default=0.2,
 	help="minimum probability to filter weak predictions")
 args = vars(ap.parse_args())
 
-# Arguments used here:
-# prototxt = MobileNetSSD_deploy.prototxt.txt (required)
-# model = MobileNetSSD_deploy.caffemodel (required)
-# confidence = 0.2 (default)
-
-# SSD (Single Shot MultiBox Detector) is a popular algorithm in object detection
-# It has no delegated region proposal network and predicts the boundary boxes and the classes directly from feature maps in one single pass
-# To improve accuracy, SSD introduces: small convolutional filters to predict object classes and offsets to default boundary boxes
-# Mobilenet is a convolution neural network used to produce high-level features
-
-# SSD is designed for object detection in real-time
-# The SSD object detection composes of 2 parts: Extract feature maps, and apply convolution filters to detect objects
-
-# Let's start by initialising the list of the 21 class labels MobileNet SSD was trained to.
-# Each prediction composes of a boundary box and 21 scores for each class (one extra class for no object),
-# and we pick the highest score as the class for the bounded object
 CLASSES = ["aeroplane", "background", "bicycle", "bird", "boat",
            "bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
            "dog", "horse", "motorbike", "person", "pottedplant", "sheep",
@@ -45,52 +29,19 @@ CLASSES = ["aeroplane", "background", "bicycle", "bird", "boat",
 # Assigning random colors to each of the classes
 COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
-# COLORS: a list of 21 R,G,B values, like ['101.097383   172.34857188 111.84805346'] for each label
-# length of COLORS = length of CLASSES = 21
-
-# load our serialized model
-# The model from Caffe: MobileNetSSD_deploy.prototxt.txt; MobileNetSSD_deploy.caffemodel;
 print("[INFO] loading model...")
 net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
-# print(net)
-# <dnn_Net 0x128ce1310>
 
-# initialize the video stream,
-# and initialize the FPS counter
-print("[INFO] starting video stream...")
-vs = VideoStream(src=0).start()
-# warm up the camera for a couple of seconds
+#print("[INFO] starting video stream...")
+#vs = VideoStream(src=0).starts()
+
+print("[INFO] Video Analysis Started...")
+vs = FileVideoStream(path="./media/cafet_1.mp4").start()
+
 time.sleep(2.0)
 
-# FPS: used to compute the (approximate) frames per second
-# Start the FPS timer
 fps = FPS().start()
 
-# OpenCV provides two functions to facilitate image preprocessing for deep learning classification: cv2.dnn.blobFromImage and cv2.dnn.blobFromImages. Here we will use cv2.dnn.blobFromImage
-# These two functions perform: Mean subtraction, Scaling, and optionally channel swapping
-
-# Mean subtraction is used to help combat illumination changes in the input images in our dataset. We can therefore view mean subtraction as a technique used to aid our Convolutional Neural Networks
-# Before we even begin training our deep neural network, we first compute the average pixel intensity across all images in the training set for each of the Red, Green, and Blue channels.
-# we end up with three variables: mu_R, mu_G, and mu_B (3-tuple consisting of the mean of the Red, Green, and Blue channels)
-# For example, the mean values for the ImageNet training set are R=103.93, G=116.77, and B=123.68
-# When we are ready to pass an image through our network (whether for training or testing), we subtract the mean, \mu, from each input channel of the input image:
-# R = R - mu_R
-# G = G - mu_G
-# B = B - mu_B
-
-# We may also have a scaling factor, \sigma, which adds in a normalization:
-# R = (R - mu_R) / sigma
-# G = (G - mu_G) / sigma
-# B = (B - mu_B) / sigma
-
-# The value of \sigma may be the standard deviation across the training set (thereby turning the preprocessing step into a standard score/z-score)
-# sigma may also be manually set (versus calculated) to scale the input image space into a particular range — it really depends on the architecture, how the network was trained
-
-# cv2.dnn.blobFromImage creates 4-dimensional blob from image. Optionally resizes and crops image from center, subtract mean values, scales values by scalefactor, swap Blue and Red channels
-# a blob is just an image(s) with the same spatial dimensions (width and height), same depth (number of channels), that have all be preprocessed in the same manner
-
-# Consider the video stream as a series of frames. We capture each frame based on a certain FPS, and loop over each frame
-# loop over the frames from the video stream
 objectCount = {
  "people":{
 	"currentCount": 0,
@@ -108,28 +59,21 @@ sleepInterval = 10
 # Todo: Recieve a notification from application with number of expected chairs. 
 expectedChairs = 1
 chairsFoundCounterCheck = (60 / sleepInterval)
-print("The chairs found: ", chairsFoundCounterCheck)
 # Todo: Send an event to mobile to start the 30 mins duration for TABLE XYZ here.
 while True:
 	objectCount["people"]["prevCount"] = objectCount["people"]["currentCount"]
 	objectCount["chair"]["prevCount"] = objectCount["chair"]["currentCount"]
 	objectCount["people"]["currentCount"] = 0
 	objectCount["chair"]["currentCount"] = 0
-	# grab the frame from the threaded video stream and resize it to have a maximum width of 400 pixels
-	# vs is the VideoStream
 	frame = vs.read()
+	print("The frame type: ",type(frame))
+	if frame is None:
+		break
 	frame = imutils.resize(frame, width=400)
-	print(frame.shape) # (225, 400, 3)
-	# grab the frame dimensions and convert it to a blob
-	# First 2 values are the h and w of the frame. Here h = 225 and w = 400
 	(h, w) = frame.shape[:2]
-	# Resize each frame
 	resized_image = cv2.resize(frame, (300, 300))
 	blob = cv2.dnn.blobFromImage(resized_image, (1/127.5), (300, 300), 127.5, swapRB=True)
-	# print(blob.shape) # (1, 3, 300, 300)
-	# pass the blob through the network and obtain the predictions and predictions
 	net.setInput(blob) # net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
-	# Predictions:
 	predictions = net.forward()
 
 	# loop over the predictions
@@ -149,6 +93,7 @@ while True:
 			# Example, box = [130.9669733   76.75442174 393.03834438 224.03566539]
 			# Convert them to integers: 130 76 393 224
 			(startX, startY, endX, endY) = box.astype("int")
+			print("The co-ordinates ", (startX, startY, endX, endY) )
 
 			# Get the label with the confidence score
 			label = "{}: {:.2f}%".format(CLASSES[idx], confidence * 100)
@@ -173,7 +118,7 @@ while True:
 	print("The number of empty seats:", objectCount["chair"]["currentCount"])
 
 	# Check every 5 seconds
-	time.sleep(sleepInterval)
+#	time.sleep(sleepInterval)
 	
 	if (expectedChairs == objectCount["chair"]["currentCount"]) and (expectedChairs == objectCount["chair"]["prevCount"]):
 		chairsFoundCounterCheck -= 1
@@ -203,8 +148,8 @@ cv2.destroyAllWindows()
 # Stop the video stream
 vs.stop()
 
-# In case you removed the opaque tape over your laptop cam, make sure you put them back on once finished ;)
-# YAYYYYYYYYYY WE ARE DONE!
 
 
+
+# cd downloads/real-time-object-detection/cafeteria-management-system
 # python3 real_time_object_detection.py --prototxt MobileNetSSD_deploy.prototxt.txt --model MobileNetSSD_deploy.caffemodel

@@ -36,7 +36,7 @@ net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
 #vs = VideoStream(src=0).starts()
 
 print("[INFO] Video Analysis Started...")
-vs = FileVideoStream(path="./media/cafet_1.mp4").start()
+vs = FileVideoStream(path="./media/cafet_6.MOV").start()
 
 time.sleep(2.0)
 

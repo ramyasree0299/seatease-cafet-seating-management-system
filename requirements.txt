@@ -1,4 +1,10 @@
 imutils
 mysql-connector-python
 cv2
+opencv-python
+opencv-contrib-python
+opencv-python-headless
+opencv-contrib-python-headless
+matplotlib
 pandas
+sqlite3

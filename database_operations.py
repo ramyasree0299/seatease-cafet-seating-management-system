@@ -44,20 +44,16 @@ def insertRecordsInTables():
 
 def selectDataFromTables():
 	conn_cursor.execute('''SELECT * from table_metadata''')
-	df_table_metadata = pd.DataFrame(c.fetchall())
+	df_table_metadata = pd.DataFrame(conn_cursor.fetchall())
 	print(df_table_metadata)
 	conn_cursor.execute('''SELECT * from table_occupancy''')
-	df_table_occupancy = pd.DataFrame(c.fetchall())
+	df_table_occupancy = pd.DataFrame(conn_cursor.fetchall())
 	print(df_table_occupancy)
 	conn.commit()
 	
 
 conn = sqlite3.connect('seatease_database') 
 conn_cursor = conn.cursor()	
-
-createDatabasesAndTables()
-insertRecordsInTables()
-#selectDataFromTables()
 
 
 

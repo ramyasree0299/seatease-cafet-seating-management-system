@@ -10,17 +10,11 @@ import argparse
 import imutils
 import time
 import cv2
-from database_operations import conn_cursor
+from database_operations import conn_cursor, createDatabasesAndTables, insertRecordsInTables
 
-# Database code
-# ----------------------------
-# from test_mysql_connection import mydb
-# mycursor = mydb.cursor()
-# mycursor.execute("SELECT * FROM table_occupancy")
-# myresult = mycursor.fetchall()
-# for x in myresult:
-# 	print(x)
-# ----------------------------
+
+createDatabasesAndTables()
+insertRecordsInTables()
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
@@ -30,6 +24,8 @@ ap.add_argument("-m", "--model", required=True,
                 help="path to Caffe pre-trained model")
 ap.add_argument("-c", "--confidence", type=float, default=0.2,
                 help="minimum probability to filter weak predictions")
+ap.add_argument("-v", "--videoFilePath", type=str, default="./media/cafet_1.mp4",
+                help="Optional Video File to run Object Detection")
 args = vars(ap.parse_args())
 
 CLASSES = ["aeroplane", "background", "bicycle", "bird", "boat",
@@ -51,7 +47,7 @@ net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
 
 
 print("[INFO] Video Analysis Started...")
-vs = FileVideoStream(path="./media/cafet_6.MOV").start()
+vs = FileVideoStream(path=args["videoFilePath"]).start()
 
 time.sleep(2.0)
 
@@ -161,6 +157,6 @@ vs.stop()
 # Commands
 #----------------------------
 # cd downloads/real-time-object-detection/seatease-cafet-seating-management-system
-# python3 real_time_object_detection.py --prototxt MobileNetSSD_deploy.prototxt.txt --model MobileNetSSD_deploy.caffemodel
+# python3 real_time_object_detection.py --prototxt MobileNetSSD_deploy.prototxt.txt --model MobileNetSSD_deploy.caffemodel --videoFilePath ./media/cafet_2.mp4
 # /usr/local/mysql/bin/mysql -uroot -p
-# python real_time_object_detection.py --prototxt MobileNetSSD_deploy.prototxt.txt --model MobileNetSSD_deploy.caffemodel
+# python real_time_object_detection.py --prototxt MobileNetSSD_deploy.prototxt.txt --model MobileNetSSD_deploy.caffemodel --videoFilePath ./media/cafet_2.mp4 

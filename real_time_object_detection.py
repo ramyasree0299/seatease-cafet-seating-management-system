@@ -10,13 +10,13 @@ import argparse
 import imutils
 import time
 import cv2
-from test_mysql_connection import mydb
+# from test_mysql_connection import mydb
 
-mycursor = mydb.cursor()
-mycursor.execute("SELECT * FROM table_occupancy")
-myresult = mycursor.fetchall()
-for x in myresult:
-	print(x)
+# mycursor = mydb.cursor()
+# mycursor.execute("SELECT * FROM table_occupancy")
+# myresult = mycursor.fetchall()
+# for x in myresult:
+# 	print(x)
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()

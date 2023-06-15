@@ -1,3 +1,4 @@
 imutils
 mysql-connector-python
 cv2
+pandas

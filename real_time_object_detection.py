@@ -10,6 +10,7 @@ import argparse
 import imutils
 import time
 import cv2
+from database_operations import conn_cursor
 
 # Database code
 # ----------------------------
@@ -45,7 +46,7 @@ net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
 # Live Stream code
 # ----------------------------
 # print("[INFO] starting video stream...")
-# vs = VideoStream(src=0).starts()
+# vs = VideoStream(src=0).start()
 # ----------------------------
 
 
@@ -157,7 +158,9 @@ cv2.destroyAllWindows()
 # Stop the video stream
 vs.stop()
 
-# cd downloads/real-time-object-detection/cafeteria-management-system
+# Commands
+#----------------------------
+# cd downloads/real-time-object-detection/seatease-cafet-seating-management-system
 # python3 real_time_object_detection.py --prototxt MobileNetSSD_deploy.prototxt.txt --model MobileNetSSD_deploy.caffemodel
 # /usr/local/mysql/bin/mysql -uroot -p
 # python real_time_object_detection.py --prototxt MobileNetSSD_deploy.prototxt.txt --model MobileNetSSD_deploy.caffemodel

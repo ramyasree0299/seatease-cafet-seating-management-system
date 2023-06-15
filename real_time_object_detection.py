@@ -10,6 +10,13 @@ import argparse
 import imutils
 import time
 import cv2
+from test_mysql_connection import mydb
+
+mycursor = mydb.cursor()
+mycursor.execute("SELECT * FROM table_occupancy")
+myresult = mycursor.fetchall()
+for x in myresult:
+	print(x)
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
@@ -153,3 +160,4 @@ vs.stop()
 
 # cd downloads/real-time-object-detection/cafeteria-management-system
 # python3 real_time_object_detection.py --prototxt MobileNetSSD_deploy.prototxt.txt --model MobileNetSSD_deploy.caffemodel
+# /usr/local/mysql/bin/mysql -uroot -p

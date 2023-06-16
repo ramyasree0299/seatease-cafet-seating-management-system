@@ -17,19 +17,20 @@ import pandas as pd
 
 def createDatabasesAndTables():	
 	# Create both the tables
-	conn_cursor.execute('''CREATE TABLE IF NOT EXISTS table_metadata ([table_id] TEXT PRIMARY KEY, [station] TEXT,[camera] TEXT)''')
+	conn_cursor.execute("DROP TABLE table_metadata")
+	conn_cursor.execute('''CREATE TABLE IF NOT EXISTS table_metadata ([table_id] TEXT PRIMARY KEY, [station] TEXT,[camera] TEXT,[x1] INTEGER, [y1] INTEGER,[x2] INTEGER,[y2] INTEGER)''')
 	conn_cursor.execute('''CREATE TABLE IF NOT EXISTS table_occupancy ([table_id] TEXT PRIMARY KEY, [total_seats] INTEGER, [seats_occupied] INTEGER, [seats_unoccupied] INTEGER,[entry_time] CURRENT_TIMESTAMP)''')
 	conn.commit()
 
 
 def insertRecordsInTables():
 	#Insert into table_metadata table
-	conn_cursor.execute("""INSERT or IGNORE INTO table_metadata VALUES ('Choix_1','Choix','Camera_1')""")	
-	conn_cursor.execute("""INSERT or IGNORE INTO table_metadata VALUES ('Choix_2','Choix','Camera_1')""")	
-	conn_cursor.execute("""INSERT or IGNORE INTO table_metadata VALUES ('Choix_3','Choix','Camera_1')""")	
-	conn_cursor.execute("""INSERT or IGNORE INTO table_metadata VALUES ('Distintly_South_1','Distintly_South','Camera_2')""")	
-	conn_cursor.execute("""INSERT or IGNORE INTO table_metadata VALUES ('Distintly_South_2','Distintly_South','Camera_2')""")	
-	conn_cursor.execute("""INSERT or IGNORE INTO table_metadata VALUES ('Distintly_South_3','Distintly_South','Camera_2')""")	
+	conn_cursor.execute("""INSERT or IGNORE INTO table_metadata VALUES ('Choix_1','Choix','Camera_1',100, 100, 300, 200)""")	
+	conn_cursor.execute("""INSERT or IGNORE INTO table_metadata VALUES ('Choix_2','Choix','Camera_1',300, 300, 100, 100)""")	
+	conn_cursor.execute("""INSERT or IGNORE INTO table_metadata VALUES ('Choix_3','Choix','Camera_1',350, 350, 50, 50)""")	
+	conn_cursor.execute("""INSERT or IGNORE INTO table_metadata VALUES ('Distintly_South_1','Distintly_South','Camera_2',0, 10, 10, 20)""")	
+	conn_cursor.execute("""INSERT or IGNORE INTO table_metadata VALUES ('Distintly_South_2','Distintly_South','Camera_2',40, 50, 50, 60)""")	
+	conn_cursor.execute("""INSERT or IGNORE INTO table_metadata VALUES ('Distintly_South_3','Distintly_South','Camera_2',100, 50, 50, 10)""")	
 	
 	# Insert into table_occupancy table
 	conn_cursor.execute("""INSERT or IGNORE INTO table_occupancy VALUES ('Choix_1',6,0,6,{time})""".format(time = time.time()))
